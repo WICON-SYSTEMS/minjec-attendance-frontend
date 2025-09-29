@@ -11,7 +11,7 @@ import {
   LogOut,
   Wallet
 } from "lucide-react";
-import minjeclogo from "@/assets/minjec-logo.png"
+import { BrandLogo } from "@/components/brand-logo";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -40,9 +40,7 @@ export function Sidebar() {
       <div className="flex flex-col h-full">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 p-6 border-b border-border">
-          <div className="w-15 h-15 rounded-lg flex items-center justify-center">
-            <img src={minjeclogo} alt="" />
-          </div>
+          <BrandLogo size={48} />
           <div>
             <h2 className="font-semibold text-foreground">AttendanceHub</h2>
             <p className="text-sm text-muted-foreground">Admin Panel</p>
@@ -76,9 +74,7 @@ export function Sidebar() {
         {/* User Profile */}
         <div className="p-4 border-t border-border">
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-            <div className="w-10 h-10  rounded-full flex items-center justify-center">
-              <img src={minjeclogo} alt="" />
-            </div>
+            <BrandLogo size={40} />
             <div className="flex-1 min-w-0">
               {/* <p className="text-sm font-medium text-foreground truncate">
                 {user?.full_name || "Admin"}

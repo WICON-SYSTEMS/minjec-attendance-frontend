@@ -11,6 +11,7 @@ import { getComprehensiveAnalytics, getAttendanceTrends, getEmployeeAnalytics, t
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEmployees } from "@/hooks/use-employees";
+import { getDownloadFileName, brandCsvHeaderRow } from "@/lib/branding";
 
 type SimpleDateRange = { from?: string; to?: string };
 
@@ -112,12 +113,14 @@ export default function ReportsPage() {
     const headers = ["attendance_id","employee_id","date","check_in_time","check_out_time","hours_worked","status","qr_code_scanned","created_at","updated_at"];
     const toCsvValue = (v: unknown) => `"${(v ?? "").toString().replace(/"/g,'""')}"`;
     const rows = empData.attendance_records.map(r => [r.attendance_id, r.employee_id, r.date, r.check_in_time, r.check_out_time, r.hours_worked ?? "", r.status, r.qr_code_scanned ?? "", r.created_at, r.updated_at ?? ""]);
-    const csv = [headers, ...rows].map(r => r.map(toCsvValue).join(',')).join('\n');
+    const brandRow = brandCsvHeaderRow();
+    const csv = [brandRow, headers, ...rows].map(r => r.map(toCsvValue).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `employee_${empCode || empId}_attendance.csv`;
+    const fileBase = getDownloadFileName(`employee_${empCode || empId}_attendance`);
+    a.download = `${fileBase}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -161,7 +164,8 @@ export default function ReportsPage() {
       "employee_id","employee_name","employee_code","department","total_days_present","total_days_late","total_days_absent","total_days_partial","total_hours_worked","average_hours_per_day","attendance_percentage","punctuality_percentage","last_attendance_date","current_status","working_days_in_period"
     ];
     const toCsvValue = (v: unknown) => `"${(v ?? "").toString().replace(/"/g,'""')}"`;
-    const csv = [headers, ...rows.map(r => [
+    const brandRow = brandCsvHeaderRow();
+    const csv = [brandRow, headers, ...rows.map(r => [
       r.employee_id,
       r.employee_name,
       r.employee_code,
@@ -182,7 +186,8 @@ export default function ReportsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `reports_${analytics.period.start_date}_${analytics.period.end_date}.csv`;
+    const fileBase = getDownloadFileName(`reports_${analytics.period.start_date}_${analytics.period.end_date}`);
+    a.download = `${fileBase}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

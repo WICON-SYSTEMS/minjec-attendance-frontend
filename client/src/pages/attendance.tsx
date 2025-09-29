@@ -10,6 +10,7 @@ import { useEmployees } from "@/hooks/use-employees";
 import { useToast } from "@/hooks/use-toast";
 import { getAllAttendance, getEmployeeAttendance, type AttendanceRecord, type ComprehensiveAnalytics } from "@/lib/attendance";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { downloadBrandedCsv } from "@/lib/downloads";
 
 // Helpers
 const formatTime = (iso?: string | null) => (iso ? new Date(iso).toLocaleTimeString() : "-");
@@ -88,17 +89,8 @@ export default function AttendancePage() {
       return;
     }
     const headers = ["attendance_id","employee_id","date","check_in_time","check_out_time","hours_worked","status","qr_code_scanned","created_at","updated_at"];
-    const toCsvValue = (v: unknown) => `"${(v ?? "").toString().replace(/"/g,'""')}"`;
-    const csv = [headers, ...historyRows.map(r => [r.attendance_id, r.employee_id, r.date, r.check_in_time, r.check_out_time, r.hours_worked ?? "", r.status, r.qr_code_scanned ?? "", r.created_at, r.updated_at ?? ""])].map(r => r.map(toCsvValue).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `attendance_${historyEmployeeId}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const rows = historyRows.map(r => [r.attendance_id, r.employee_id, r.date, r.check_in_time, r.check_out_time, r.hours_worked ?? "", r.status, r.qr_code_scanned ?? "", r.created_at, r.updated_at ?? ""]);
+    downloadBrandedCsv(headers, rows, `attendance_${historyEmployeeId}`);
   };
 
   // Auto-fetch on initial mount
@@ -147,17 +139,19 @@ export default function AttendancePage() {
       return;
     }
     const headers = ["attendance_id","employee_id","date","check_in_time","check_out_time","hours_worked","status","qr_code_scanned","created_at","updated_at"];
-    const toCsvValue = (v: unknown) => `"${(v ?? "").toString().replace(/"/g,'""')}"`;
-    const csv = [headers, ...rows.map(r => [r.attendance_id, r.employee_id, r.date, r.check_in_time, r.check_out_time, r.hours_worked ?? "", r.status, r.qr_code_scanned ?? "", r.created_at, r.updated_at ?? ""])].map(r => r.map(toCsvValue).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `attendance_${selectedEmployeeId || "all"}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const csvRows = rows.map((r: AttendanceRecord) => [
+      r.attendance_id,
+      r.employee_id,
+      r.date,
+      r.check_in_time,
+      r.check_out_time,
+      r.hours_worked ?? "",
+      r.status,
+      r.qr_code_scanned ?? "",
+      r.created_at,
+      r.updated_at ?? "",
+    ]);
+    downloadBrandedCsv(headers, csvRows, `attendance_${selectedEmployeeId || "all"}`);
   };
 
   const filtered = rows.filter((r) => {

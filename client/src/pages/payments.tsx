@@ -15,6 +15,7 @@ import { getAllSalaries, getEmployeeSalary, type SalariesListResponse, type Empl
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Link } from "wouter";
+import { downloadBrandedCsv } from "@/lib/downloads";
 
 export default function PaymentsPage() {
   const { toast } = useToast();
@@ -152,31 +153,22 @@ export default function PaymentsPage() {
       const header = [
         "employee_id","employee_name","employee_code","department","position","base_salary","monthly_hours_worked","expected_hours","hourly_rate","calculated_salary","month","year"
       ];
-      const lines = [header.join(",")].concat(
-        allRows.map(s => [
-          s.employee_id,
-          JSON.stringify(s.employee_name ?? ""),
-          s.employee_code ?? "",
-          JSON.stringify(s.department ?? ""),
-          JSON.stringify(s.position ?? ""),
-          s.base_salary ?? "",
-          s.monthly_hours_worked ?? "",
-          s.expected_hours ?? "",
-          s.hourly_rate ?? "",
-          s.calculated_salary ?? "",
-          s.month ?? "",
-          s.year ?? "",
-        ].join(","))
-      );
-      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `salaries_${salYear || "yyyy"}_${salMonth || "mm"}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const rows = allRows.map(s => [
+        s.employee_id,
+        s.employee_name ?? "",
+        s.employee_code ?? "",
+        s.department ?? "",
+        s.position ?? "",
+        s.base_salary ?? "",
+        s.monthly_hours_worked ?? "",
+        s.expected_hours ?? "",
+        s.hourly_rate ?? "",
+        s.calculated_salary ?? "",
+        s.month ?? "",
+        s.year ?? "",
+      ]);
+      const base = `salaries_${salYear || "yyyy"}_${salMonth || "mm"}`;
+      downloadBrandedCsv(header, rows, base);
     } catch (e: any) {
       toast({ title: "Export failed", description: e?.message || "", variant: "destructive" });
     } finally {
