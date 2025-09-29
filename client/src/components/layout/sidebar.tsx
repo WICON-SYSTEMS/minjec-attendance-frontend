@@ -1,15 +1,15 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { 
-  Home, 
-  Users, 
-  Clock, 
-  BarChart3, 
-  Settings, 
+import {
+  Home,
+  Users,
+  Clock,
+  BarChart3,
+  Settings,
   Building2,
   LogOut,
-  Wallet
+  Wallet,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 
@@ -40,7 +40,7 @@ export function Sidebar() {
       <div className="flex flex-col h-full">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 p-6 border-b border-border">
-          <BrandLogo size={48} />
+          <BrandLogo size={50} />
           <div>
             <h2 className="font-semibold text-foreground">AttendanceHub</h2>
             <p className="text-sm text-muted-foreground">Admin Panel</p>
@@ -52,7 +52,7 @@ export function Sidebar() {
           {navigation.map((item) => {
             const isActive = location === item.href;
             const Icon = item.icon;
-            
+
             return (
               <Link key={item.name} href={item.href}>
                 <div
@@ -73,25 +73,26 @@ export function Sidebar() {
 
         {/* User Profile */}
         <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
-            <BrandLogo size={40} />
-            <div className="flex-1 min-w-0">
-              {/* <p className="text-sm font-medium text-foreground truncate">
+          <div className="flex items-center justify-center gap-3 p-3 rounded-lg bg-muted">
+            <BrandLogo size={45} />
+            <div className="flex items-center flex-col justfy-center">
+              <div className="min-w-0">
+                {/* <p className="text-sm font-medium text-foreground truncate">
                 {user?.full_name || "Admin"}
               </p> */}
 
-              
-              <p className="text-xs text-muted-foreground">Administrator</p>
+                <p className="text-sm text-muted-foreground">Administrator</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={logout}
+                data-testid="button-logout"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Logout <LogOut className="h-4 w-4" />
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={logout}
-              data-testid="button-logout"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       </div>
