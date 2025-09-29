@@ -19,6 +19,7 @@ const navigation = [
   { name: "Attendance", href: "/attendance", icon: Clock },
   { name: "Reports", href: "/reports", icon: BarChart3 },
   { name: "Payments", href: "/payments", icon: Wallet },
+  { name: "Contact & Support", href: "/contact", icon: Settings },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
