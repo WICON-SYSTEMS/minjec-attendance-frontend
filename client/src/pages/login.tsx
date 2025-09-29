@@ -27,10 +27,10 @@ export default function Login() {
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: "username",
-      password: "password",
-    },
+    // defaultValues: {
+    //   username: "username",
+    //   password: "password",
+    // },
   });
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function Login() {
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="admin"
+                        placeholder="Enter your username"
                         {...field}
                         data-testid="input-username"
                       />
@@ -90,7 +90,7 @@ export default function Login() {
                     <FormControl>
                       <div className="relative">
                         <Input
-                          type={showPassword ? "text" : "password"}
+                          type="text"
                           placeholder="Enter your password"
                           {...field}
                           data-testid="input-password"
