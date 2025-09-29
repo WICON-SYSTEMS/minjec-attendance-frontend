@@ -4,14 +4,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
 import { Shield, Eye, EyeOff } from "lucide-react";
 import { loginSchema } from "@shared/schema";
 import type { LoginData } from "@shared/schema";
-import minjeclogo from "@/assets/minjec-logo.png"
+import minjeclogo from "@/assets/minjec-logo.png";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,8 +28,8 @@ export default function Login() {
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "minjecadmin",
-      password: "minjec@admin",
+      username: "username",
+      password: "password",
     },
   });
 
@@ -45,8 +52,12 @@ export default function Login() {
               {/* <Shield className="h-8 w-8 text-primary-foreground" /> */}
               <img src={minjeclogo} alt="" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">MINJEC Admin Portal</h1>
-            <p className="text-muted-foreground mt-2">Attendance System Dashboard</p>
+            <h1 className="text-2xl font-bold text-foreground">
+              MINJEC Admin Portal
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Attendance System Dashboard
+            </p>
           </div>
 
           <Form {...form}>
@@ -129,12 +140,6 @@ export default function Login() {
               </Button>
             </form>
           </Form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              Demo credentials: minjecadmin / minjec@admin
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
